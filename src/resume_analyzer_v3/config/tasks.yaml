@@ -1,0 +1,44 @@
+summarize_resume:
+  description: >
+    Read the full resume and generate a concise summary
+    (2–3 paragraphs) that captures the candidate’s background,
+    key roles, education, and strengths.
+    Here is the resume: {resume}
+  expected_output: >
+    A 2-3 paragraph professional summary
+  agent: resume_analyst
+
+skill_extraction_and_evaluation:
+  description: >
+    Extract all technical and soft skills from the resume
+    and rank them based on how frequently
+    and prominently they are mentioned.
+  expected_output: >
+    A list of skills with scores (out of 100) and a rationale
+  agent: skill_evaluator
+
+job_matching:
+  description: >
+    Based on the candidate's experience, skills, and
+    education, recommend 3-5 job roles or titles
+    they are well-suited for.
+  expected_output: >
+    A short list of job suggestions with reasoning
+  context:
+    - skill_extraction_and_evaluation
+  agent: job_matcher
+
+final_candidate_summary:
+  description: >
+    Using insights from prior agents (summary, skills,
+    and job recommendations), generate a final report
+    assessing the candidate's overall strength and
+    fit in the job market.
+  expected_output: >
+    A cohesive candidate report combining all previous results in a markdown format.
+  output_file: >
+    final_summary.md
+  context:
+    - skill_extraction_and_evaluation
+    - job_matching
+  agent: candidate_summarizer

@@ -1,0 +1,27 @@
+[project]
+name = "resume_analyzer_v3"
+version = "0.1.0"
+description = "Resume_Analyzer_v3 using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.150.0,<1.0.0",
+    "google-genai>=1.28.0",
+    "google-generativeai>=0.8.5",
+    "hatchling>=1.27.0",
+    "langchain-groq>=0.3.6",
+]
+
+[project.scripts]
+resume_analyzer_v3 = "resume_analyzer_v3.main:run"
+run_crew = "resume_analyzer_v3.main:run"
+train = "resume_analyzer_v3.main:train"
+replay = "resume_analyzer_v3.main:replay"
+test = "resume_analyzer_v3.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
