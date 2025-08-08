@@ -10,6 +10,7 @@ dependencies = [
     "google-generativeai>=0.8.5",
     "hatchling>=1.27.0",
     "langchain-groq>=0.3.6",
+    "streamlit>=1.48.0",
 ]
 
 [project.scripts]

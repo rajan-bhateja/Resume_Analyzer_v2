@@ -6,13 +6,14 @@ from resume_analyzer_v3.crew import ResumeAnalyzerV3
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
+resume = r"C:\Users\rajan\OneDrive\Desktop\Rajan_Bhateja_Resume_Jul25.pdf"
 
 def run():
     """
     Run the crew.
     """
     inputs = {
-        "resume": r"C:\Users\rajan\OneDrive\Desktop\Rajan_Bhateja_Resume_Jul25.pdf"
+        "resume_path": resume,
     }
 
     try:
@@ -21,3 +22,6 @@ def run():
         print("Full traceback:")
         traceback.print_exc()
         raise Exception(f"An error occurred while running the crew: {str(e)}")
+
+if __name__ == "__main__":
+    run()

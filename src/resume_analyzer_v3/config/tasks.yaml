@@ -3,42 +3,51 @@ summarize_resume:
     Read the full resume and generate a concise summary
     (2–3 paragraphs) that captures the candidate’s background,
     key roles, education, and strengths.
-    Here is the resume: {resume}
+    Save it using FileWriterTool to 'rajan_overview.md'
   expected_output: >
-    A 2-3 paragraph professional summary
+    A 2-3 paragraph professional summary in a markdown format
   agent: resume_analyst
+  output_file: >
+    rajan_overview.md
 
 skill_extraction_and_evaluation:
   description: >
     Extract all technical and soft skills from the resume
     and rank them based on how frequently
     and prominently they are mentioned.
+    Save this data as a CSV to 'rajan_skills.csv'
   expected_output: >
-    A list of skills with scores (out of 100) and a rationale
+    CSV file containing skills, scores (out of 100), and a rationale
   agent: skill_evaluator
+  output_file: >
+    rajan_skills.csv
 
 job_matching:
   description: >
     Based on the candidate's experience, skills, and
     education, recommend 3-5 job roles or titles
     they are well-suited for.
+    Save this data as a CSV to 'rajan_job_recommendations.csv'
   expected_output: >
-    A short list of job suggestions with reasoning
+    CSV file containing job recommendations, scores (out of 100), and a rationale
   context:
     - skill_extraction_and_evaluation
   agent: job_matcher
+  output_file: >
+    rajan_job_recommendations.csv
 
 final_candidate_summary:
   description: >
     Using insights from prior agents (summary, skills,
     and job recommendations), generate a final report
     assessing the candidate's overall strength and
-    fit in the job market.
+    fit in the job market. Don't mention the scores.
+    Save it using FileWriterTool to 'rajan_summary.md'
   expected_output: >
     A cohesive candidate report combining all previous results in a markdown format.
-  output_file: >
-    final_summary.md
   context:
     - skill_extraction_and_evaluation
     - job_matching
   agent: candidate_summarizer
+  output_file: >
+    rajan_summary.md

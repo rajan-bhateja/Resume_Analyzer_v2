@@ -1,39 +1,19 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import RagTool
+from crewai_tools import PDFSearchTool, FileWriterTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
+import os
 
 
-# Create a RAG tool with custom configuration
-config = {
-    "llm": {
-        "provider": "google",
-        "config": {
-            "model": "gemini-2.5-flash",
-        }
-    },
-    "embedding_model": {
-        "provider": "google",
-        "config": {
-            "model": "gemini-embedding-001"
-        }
-    },
-    "vectordb": {
-        "provider": "chroma",
-        "config": {
-            "collection_name": "my-collection",
-        }
-    },
-    "chunker": {
-        "chunk_size": 10,
-        "chunk_overlap": 4,
-        "length_function": "len",
-        "min_chunk_size": 0
-    }
-}
+os.makedirs("analysis", exist_ok=True)
 
-pdf_rag_tool = RagTool(config=config, summarize=True)
+
+pdf_rag_tool = PDFSearchTool()
+overview_writer_tool = FileWriterTool()
+skills_extractor_tool = FileWriterTool()
+jobs_recommendation_tool = FileWriterTool()
+summary_writer_tool = FileWriterTool()
 
 @CrewBase
 class ResumeAnalyzerV3():
@@ -49,7 +29,7 @@ class ResumeAnalyzerV3():
     def resume_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['resume_analyst'], # type: ignore[index]
-            tools=[pdf_rag_tool],
+            tools=[pdf_rag_tool, overview_writer_tool],
             verbose=True
         )
 
@@ -57,7 +37,7 @@ class ResumeAnalyzerV3():
     def skill_evaluator(self) -> Agent:
         return Agent(
             config=self.agents_config['skill_evaluator'], # type: ignore[index]
-            tools=[pdf_rag_tool],
+            tools=[pdf_rag_tool, skills_extractor_tool],
             verbose=True
         )
 
@@ -65,6 +45,7 @@ class ResumeAnalyzerV3():
     def job_matcher(self) -> Agent:
         return Agent(
             config=self.agents_config['job_matcher'],  # type: ignore[index]
+            tools=[pdf_rag_tool, jobs_recommendation_tool],
             verbose=True
         )
 
@@ -72,6 +53,7 @@ class ResumeAnalyzerV3():
     def candidate_summarizer(self) -> Agent:
         return Agent(
             config=self.agents_config['candidate_summarizer'],  # type: ignore[index]
+            tools=[summary_writer_tool],
             verbose=True
         )
 
